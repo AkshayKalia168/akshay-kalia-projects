@@ -70,7 +70,7 @@ https://youtu.be/xvFZjo5PgG0
 ```
 
 
-### 🎮 Wordle Game Clone (`wordle.c`)
+### 🎮 Wordle Game Clone (`wordle.c`) - C
 
 A terminal-based version of the Wordle game written in C. This game reads a secret 5-letter word from a file and allows the user up to 6 attempts to guess it. Letters that are correct and in the correct position are shown in uppercase. Correct letters in the wrong position are marked with `^` symbols underneath.
 
