@@ -1,9 +1,9 @@
 # akshay-kalia-projects
 A collection of personal and academic projects written in C and Python, showcasing foundational programming skills and problem-solving.
 
-### 🧼 CSV Cleaner (`scourgify.py`) – Python
+### 🧼 CSV Cleaner (`csv_cleaner.py`) – Python
 
-This Python script reformats a CSV file by splitting full names into separate `first` and `last` columns and preserving the `house` field. It reads an input CSV file (with a "name" and "house" column) and writes a new CSV file in a clean, structured format.
+This Python script reformats a CSV file by splitting full names into separate `first` and `last` columns and preserving the `department` field. It reads an input CSV file (with a "name" and "department" column) and writes a new CSV file in a clean, structured format.
 
 It's useful for:
 - Practicing file input/output and CSV parsing in Python
@@ -12,8 +12,8 @@ It's useful for:
 
 #### 💡 How It Works:
 – The user provides two command-line arguments: the input CSV file and the output CSV file.  
-– Each row in the input file has a `"name"` column (in `"Last, First"` format) and a `"house"` column.  
-– The script splits the name, cleans the data, and writes it in the format: `first`, `last`, `house`.
+– Each row in the input file has a `"name"` column (in `"Last, First"` format) and a `"department"` column.  
+– The script splits the name, cleans the data, and writes it in the format: `first`, `last`, `department`.
 
 This project demonstrates core Python concepts like:
 – File input/output  
@@ -23,21 +23,19 @@ This project demonstrates core Python concepts like:
 
 #### 🔍 Example:
 
-**Input and Output:**
-```csv
 Input (`before.csv`):
-name,house
-"Potter, Harry",Gryffindor
-"Granger, Hermione",Gryffindor
-"Malfoy, Draco",Slytherin
+```csv
+name,department  
+"Smith, John",Engineering  
+"Doe, Jane",Marketing  
+"Johnson, Emily",Human Resources  
 
 Output (`after.csv`):
-first,last,house
-Harry,Potter,Gryffindor
-Hermione,Granger,Gryffindor
-Draco,Malfoy,Slytherin
+first,last,department  
+John,Smith,Engineering  
+Jane,Doe,Marketing  
+Emily,Johnson,Human Resources  
 ```
-
 
 ### 📺 YouTube Link Extractor (`watch.py`) - Python 
 
