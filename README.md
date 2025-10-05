@@ -1,6 +1,52 @@
 # akshay-kalia-projects
 A collection of personal and academic projects written in C and Python, showcasing foundational programming skills and problem-solving.
 
+---
+
+### 🏭 ScrapSense (Manufacturing Scrap Logging App) – Python + Tkinter
+
+**ScrapSense** is a full-featured desktop application built with Python and Tkinter that allows manufacturing teams to log, track, and analyze production scrap.  
+It integrates real-time dashboards, data visualization, and predictive analytics, designed for easy use in factory and industrial environments.
+
+This project demonstrates advanced Python concepts including:
+- Object-Oriented GUI design using **Tkinter**  
+- **SQLite/PostgreSQL** database integration  
+- Data visualization with **Matplotlib** and **Plotly**  
+- Report generation with **Jinja2** and **pdfkit**  
+- Modular multi-frame architecture for navigation between pages  
+
+---
+
+#### 💡 Core Features:
+- 📊 **Dashboard:** Displays KPIs like total scrap, cost, and top causes  
+- ➕ **Add Scrap:** Log new scrap entries with operator, machine, reason, and shift details  
+- 📁 **View Logs:** Filter scrap history by operator, date, or shift  
+- 🤖 **View Predictions:** Analyze predicted monthly scrap using regression models  
+- 📑 **Generate Report:** Export analytics and charts into professional PDF reports  
+
+---
+
+#### 🧠 Key Technical Highlights:
+- Multi-page Tkinter interface with persistent sidebar navigation  
+- Responsive layout that adapts to different screen resolutions  
+- Real-time clock and dynamic KPI updates  
+- PDF report generation (PowerBI-style) with embedded charts  
+- Designed for manufacturing efficiency and recruiter showcase  
+
+---
+
+#### 🖼️ Example Screenshot:
+*(Dashboard view – showing KPIs and navigation sidebar)*  
+![ScrapSense Dashboard](images/dashboard_example.png)
+
+---
+
+#### ▶️ How to Run:
+```bash```
+pip install -r requirements.txt
+python3 main.py
+
+
 ### 🧼 CSV Cleaner (`csv_cleaner.py`) – Python
 
 This Python script reformats a CSV file by splitting full names into separate `first` and `last` columns and preserving the `department` field. It reads an input CSV file (with a "name" and "department" column) and writes a new CSV file in a clean, structured format.
@@ -36,37 +82,6 @@ John,Smith,Engineering
 Jane,Doe,Marketing  
 Emily,Johnson,Human Resources  
 ```
-
-### 📺 YouTube Link Extractor (`watch.py`) - Python 
-
-This Python script is a simple utility that extracts the video ID from an embedded YouTube `<iframe>` HTML tag and converts it into a shortened `youtu.be` link.
-
-It's useful for:
-- Simplifying YouTube links for sharing or display
-- Practicing basic use of regular expressions (`re` module)
-- Understanding how to parse and manipulate HTML-like strings
-
-#### 💡 How It Works:
-- The user provides a string containing an embedded YouTube `<iframe>` tag.
-- The script uses a regular expression to extract the YouTube video ID from the `src` attribute.
-- It then constructs a new shortened link using the format: `https://youtu.be/{video_id}`.
-
-This project demonstrates core Python concepts like:
-- Input/output handling
-- String parsing
-- Regular expressions (`re.search`)
-- Function structure and modularity
-
-#### 🔍 Example:
-
-**Input and Output:**
-```html
-<iframe width="560" height="315" src="https://www.youtube.com/embed/xvFZjo5PgG0" frameborder="0"></iframe>
-
-Output:
-https://youtu.be/xvFZjo5PgG0
-```
-
 
 ### 🎮 Wordle Game Clone (`wordle.c`) - C
 
