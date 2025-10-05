@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Production Scrap</title>
+  <style>
+    /* --- Theme (BI-like, wkhtmltopdf-safe) --- */
+    :root{
+      --bg:#F3F6F9; --card:#FFFFFF; --ink:#0E2A47; --muted:#5B6B82; --hr:#E6ECF3;
+      --accent:#0EA5E9; --good:#16A34A; --bad:#DC2626; --warn:#EAB308;
+      --radius:14px;
+    }
+    body{margin:0;background:var(--bg);font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;color:var(--ink)}
+    h1,h2,h3{margin:0 0 6px 0;font-weight:700}
+    .wrap{padding:24px 28px}
+
+    /* Header */
+    .header{width:100%; margin-bottom:14px;}
+    .hdr-table{width:100%;border-collapse:collapse}
+    .hdr-table td{vertical-align:middle}
+    .company{font-weight:800;font-size:22px}
+    .meta{color:var(--muted);text-align:right}
+
+    /* Card */
+    .card{background:var(--card);border:1px solid var(--hr);border-radius:var(--radius);}
+    .pad{padding:16px 18px}
+    .title-muted{color:var(--muted);font-weight:700;margin-bottom:8px}
+
+    /* Two-column rows (table based, safe) */
+    .row-2{width:100%;border-collapse:separate;border-spacing:12px}
+    .row-2 td{vertical-align:top}
+    .w40{width:40%}.w60{width:60%}
+
+    /* Hero KPI */
+    .pct{font-size:38px;font-weight:900;margin:8px 0 14px 0}
+    .pct.up{color:var(--good)} .pct.down{color:var(--bad)}
+    .hr{height:1px;background:var(--hr);margin:10px 0}
+    .kline{margin-top:6px}
+    .kname{color:var(--muted);font-weight:600}
+    .kval{font-weight:800;margin-top:3px}
+
+    /* KPI strip (6 tiles) */
+    .strip{width:100%;border-collapse:separate;border-spacing:12px;margin-top:12px}
+    .mini{padding:12px}
+    .mini .val{font-size:16px;font-weight:800}
+    .mini .lab{color:var(--muted);margin-top:4px}
+
+    /* Insights */
+    .insights{margin-top:10px}
+    .pill{display:inline-block;background:#E7F6EF;color:#11633E;border:1px solid #CFECDD;padding:6px 10px;border-radius:999px;font-weight:600;margin:0 6px 6px 0}
+
+    /* Charts block */
+    .chart-body{text-align:center}
+    img{max-width:100%}
+
+    /* Lower charts rows */
+    .row-charts{width:100%;border-collapse:separate;border-spacing:12px;margin-top:12px}
+
+    /* Top 3 tables (compact) */
+    .mini-table{width:100%;border-collapse:collapse;font-size:12px}
+    .mini-table th{background:#EFF6FF;color:#18354e;padding:6px 8px;text-align:left}
+    .mini-table td{padding:6px 8px;border-bottom:1px solid var(--hr)}
+    .delta.up{color:var(--good);font-weight:700}
+    .delta.down{color:var(--bad);font-weight:700}
+
+    /* Detailed table */
+    .grid{width:100%;border-collapse:collapse}
+    thead th{background:#EAF1FF;color:#18354e;padding:8px 10px;text-align:left}
+    tbody td{padding:8px 10px;border-bottom:1px solid var(--hr);color:#324055}
+    tbody tr:nth-child(even){background:#F7FBFE}
+
+    /* Footer spacer so footer text (wkhtml) isn’t cramped */
+    .footer-pad{height:6mm}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- BOOKMARK H1 -->
+    <h1 style="display:none">Production Scrap Report</h1>
+
+    <!-- Header -->
+    <div class="header card pad">
+      <table class="hdr-table">
+        <tr>
+          <td><div class="company">Production Scrap</div></td>
+          <td class="meta">
+            Period: {{ start_date }} – {{ end_date }}<br/>
+            Generated: {{ generated_at }}
+          </td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- Row 1: Hero + Time Series -->
+    <table class="row-2">
+      <tr>
+        <td class="w40">
+          <div class="card pad">
+            <div class="title-muted">Production Order Scrap %</div>
+            <div class="pct {{ hero.trend_class }}">{{ hero.scrap_pct }}
+              {% if hero.trend_arrow %}<span style="font-size:16px">{{ hero.trend_arrow }}</span>{% endif %}
+            </div>
+            <div class="kline">
+              <div class="kname">Δ vs prev period</div>
+              <div class="kval {{ hero.trend_class }}">{{ hero.scrap_delta }}</div>
+            </div>
+            <div class="hr"></div>
+            <div class="kline">
+              <div class="kname">Finished Quantity</div>
+              <div class="kval">{{ hero.finished_qty }}</div>
+            </div>
+            <div class="kline">
+              <div class="kname">Scrap Quantity</div>
+              <div class="kval">{{ hero.scrap_qty }}</div>
+            </div>
+          </div>
+        </td>
+        <td class="w60">
+          <div class="card pad">
+            <div class="title-muted">Scrap Quantity Over Time</div>
+            <div class="chart-body"><img src="{{ charts.line }}" alt="Scrap over time"/></div>
+            <div class="insights">
+              {% for pill in insights %}
+              <span class="pill">{{ pill|safe }}</span>
+              {% endfor %}
+            </div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- KPI strip -->
+    <table class="strip">
+      <tr>
+        {% for m in minis %}
+          <td>
+            <div class="card mini">
+              <div class="val">{{ m.value }}</div>
+              <div class="lab">{{ m.label }}</div>
+            </div>
+          </td>
+        {% endfor %}
+      </tr>
+    </table>
+
+    <!-- Row 2: Charts + Top 3 tables -->
+    <table class="row-charts">
+      <tr>
+        <td style="width:50%">
+          <div class="card pad">
+            <div class="title-muted">Scrap % by Shift</div>
+            <div class="chart-body"><img src="{{ charts.shift }}" alt="Scrap % by shift"/></div>
+          </div>
+        </td>
+        <td style="width:50%">
+          <div class="card pad">
+            <div class="title-muted">Scrap Quantity by Scrap Code</div>
+            <div class="chart-body"><img src="{{ charts.reason }}" alt="Scrap by reason"/></div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td style="width:50%">
+          <div class="card pad">
+            <div class="title-muted">Top 3 Machines (by scrap)</div>
+            <table class="mini-table">
+              <thead><tr><th>Machine</th><th>Qty</th><th>Δ</th></tr></thead>
+              <tbody>
+                {% for r in top3_machines %}
+                  <tr><td>{{ r.name }}</td><td>{{ r.qty }}</td><td class="delta {{ r.delta_class }}">{{ r.delta }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </td>
+        <td style="width:50%">
+          <div class="card pad">
+            <div class="title-muted">Top 3 Operators (by scrap)</div>
+            <table class="mini-table">
+              <thead><tr><th>Operator</th><th>Qty</th><th>Δ</th></tr></thead>
+              <tbody>
+                {% for r in top3_ops %}
+                  <tr><td>{{ r.name }}</td><td>{{ r.qty }}</td><td class="delta {{ r.delta_class }}">{{ r.delta }}</td></tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <div class="card pad">
+            <div class="title-muted">Scrap Quantity by Machine</div>
+            <div class="chart-body"><img src="{{ charts.machine }}" alt="Scrap by machine"/></div>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <!-- Detailed Rows -->
+    <h2 style="display:none">Detailed Scrap Logs</h2>
+    <div class="card pad" style="margin-top:12px">
+      <h3 style="margin-bottom:8px;color:#21314a">Detailed Scrap Logs</h3>
+      <table class="grid">
+        <thead>
+          <tr>{% for col in table_cols %}<th>{{ col }}</th>{% endfor %}</tr>
+        </thead>
+        <tbody>
+          {% for row in table_data %}
+            <tr>{% for item in row %}<td>{{ item }}</td>{% endfor %}</tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="footer-pad"></div>
+  </div>
+</body>
+</html>
